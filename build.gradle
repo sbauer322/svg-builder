@@ -23,6 +23,7 @@ repositories {
 
 dependencies {
     xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0'
+    xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-basics-annotate:1.0.4'
 }
 
 xjcGenerate {
@@ -30,7 +31,7 @@ xjcGenerate {
     bindingFiles = fileTree('src/main/jaxb') { include '*.xjb' }
 
     extraArgs = [
-            '-Xfluent-api'
+            '-Xfluent-api', '-Xannotate'
     ]
 }
 
