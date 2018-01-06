@@ -22,12 +22,16 @@ repositories {
 }
 
 dependencies {
-
+    xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0'
 }
 
 xjcGenerate {
     source = fileTree('build/schemas') { include '*.xsd' }
     bindingFiles = fileTree('src/main/jaxb') { include '*.xjb' }
+
+    extraArgs = [
+            '-Xfluent-api'
+    ]
 }
 
 task download() {
