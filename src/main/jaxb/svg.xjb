@@ -1,0 +1,35 @@
+<bindings xmlns="http://java.sun.com/xml/ns/jaxb"
+          xmlns:xs="http://www.w3.org/2001/XMLSchema"
+          version="2.1">
+    <bindings schemaLocation="../../../build/schemas/svg.xsd" version="1.0">
+
+        <globalBindings
+                typesafeEnumMaxMembers="2000"
+                generateMixedExtensions="true"
+        />
+
+        <!-- Customise the package name -->
+        <schemaBindings>
+            <package name="com.github.rahulsom.svg"/>
+        </schemaBindings>
+
+        <bindings node="//xs:element[@name='SVG.Script.class']">
+            <bindings node=".//xs:attribute[@name='type']">
+                <property name="typeAttribute"/>
+            </bindings>
+        </bindings>
+
+        <bindings node="//xs:element[@name='animateTransform']">
+            <bindings node=".//xs:attribute[@name='type']">
+                <property name="typeAttribute"/>
+            </bindings>
+        </bindings>
+
+        <bindings node="//xs:element[@name='glyph']">
+            <bindings node=".//xs:attribute[@name='lang']">
+                <property name="langAttribute"/>
+            </bindings>
+        </bindings>
+
+    </bindings>
+</bindings>

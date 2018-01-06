@@ -1,0 +1,118 @@
+import com.github.rahulsom.svgbuilder.Converter
+
+plugins {
+    id "com.gradle.build-scan" version "1.11"
+    id "me.champeau.buildscan-recipes" version "0.2.3"
+
+    id 'java'
+    id "nebula.info" version "3.6.0"
+    id "nebula.release" version "6.1.1"
+    id "com.bmuschko.nexus" version "2.3.1"
+    id 'org.unbroken-dome.xjc' version '1.1.3'
+    id "io.codearte.nexus-staging" version "0.11.0"
+}
+
+group 'com.github.rahulsom'
+description = 'JAXB Classes for SVG'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}
+
+xjcGenerate {
+    source = fileTree('build/schemas') { include '*.xsd' }
+    bindingFiles = fileTree('src/main/jaxb') { include '*.xjb' }
+}
+
+task download() {
+    doFirst {
+        if (!file("build/schemas/svg.dtd").exists()) {
+            file("$buildDir/schemas").mkdirs()
+            file("build/schemas/svg.dtd").text =
+                    new URL('https://www.w3.org/Graphics/SVG/1.1/DTD/svg11-flat-20030114.dtd').text
+        }
+        new Converter().convert()
+    }
+}
+xjcGenerate.dependsOn 'download'
+compileJava.dependsOn 'xjcGenerate'
+
+modifyPom {
+    project {
+        name project.name.split('-').collect { it.capitalize() }.join(' ')
+        description project.description
+        url 'https://github.com/rahulsom/svg-builder'
+        inceptionYear '2018'
+
+        scm {
+            url 'https://github.com/rahulsom/svg-builder'
+            connection 'scm:https://github.com/rahulsom/svg-builder.git'
+            developerConnection 'scm:git://github.com/rahulsom/svg-builder.git'
+        }
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
+
+        developers {
+            developer {
+                id 'rahulsom'
+                name 'Rahul Somasunderam'
+                email 'rahul.som@gmail.com'
+            }
+        }
+
+        issueManagement {
+            system 'Github'
+            url 'https://github.com/rahulsom/svg-builder/issues'
+        }
+    }
+}
+
+extraArchive {
+    sources = true
+    tests = true
+    javadoc = false
+}
+
+nexus {
+    sign = !version.toString().contains('-SNAPSHOT')
+}
+
+tasks.release.dependsOn 'uploadArchives'
+project.tasks.findByName('closeRepository').mustRunAfter 'uploadArchives'
+
+project.afterEvaluate {
+    if (!version.toString().endsWith('-SNAPSHOT')) {
+        tasks.release.dependsOn 'closeAndPromoteRepository'
+    }
+}
+
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
+
+buildScanRecipes {
+    recipes 'git-commit', 'git-status', 'travis-ci', 'gc-stats'
+}
+
+nexusStaging {
+    delayBetweenRetriesInMillis = 10000
+    numberOfRetries = 30
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.outputDirectory
+}
