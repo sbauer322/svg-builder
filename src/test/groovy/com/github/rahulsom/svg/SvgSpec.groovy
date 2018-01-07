@@ -14,4 +14,7 @@ class SvgSpec extends Specification {
     void 'java builder works'() {
         expect: JavaBuilder.createSvg() == EXPECTED
     }
+    void 'groovy builder works'() {
+        expect: GroovyBuilder.createSvg() == EXPECTED
+    }
 }
