@@ -52,7 +52,7 @@ project.tasks.findByName('closeRepository').mustRunAfter 'uploadArchives'
 
 project.afterEvaluate {
     if (!version.toString().endsWith('-SNAPSHOT')) {
-        tasks.release.dependsOn 'closeAndPromoteRepository'
+        tasks.release.dependsOn 'closeAndReleaseRepository'
     }
 }
 
