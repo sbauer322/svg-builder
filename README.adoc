@@ -1,0 +1,42 @@
+https://opensource.org/licenses/Apache-2.0[image:https://img.shields.io/badge/License-Apache%202.0-blue.svg[License]]
+https://maven-badges.herokuapp.com/maven-central/com.github.rahulsom/svg-builder[image:image::https://maven-badges.herokuapp.com/maven-central/com.github.rahulsom/svg-builder/badge.svg[MavenCentral]]
+
+= SVG Builder
+
+JAXB Classes for SVG.
+
+== Usage
+
+In Java code, the fluent API can be used to build SVG
+
+[source,java]
+----
+ObjectFactory objectFactory = new ObjectFactory();
+Svg svg = objectFactory.createSvg().
+        withHeight("3").
+        withWidth("7").
+        withSVGDescriptionClassOrSVGAnimationClassOrSVGStructureClass(
+                objectFactory.createCircle(
+                        objectFactory.createCircle()
+                ),
+                objectFactory.createA(
+                        objectFactory.createSVGHyperlinkClass()
+                )
+        );
+----
+
+In Groovy code, the same can be done. Alternately a simpler DSL can be used.
+
+[source,groovy]
+----
+@NewifySvg
+void foo() {
+    def svg =
+        Svg(height: '3', width: '7').content {
+            it << Circle()
+            it << SVGHyperlinkClass()
+        }
+}
+----
+
+The resulting object is like any JAXB Root Element and can be marshaled from that point on.

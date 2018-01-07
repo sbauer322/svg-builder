@@ -10,7 +10,7 @@ import javax.xml.bind.Marshaller
 class GroovyBuilder {
 
 	static String createSvg() {
-		def retval =
+		def svg =
 				Svg(height: '3', width: '7').content {
 					it << Circle()
 					it << SVGHyperlinkClass()
@@ -19,7 +19,7 @@ class GroovyBuilder {
 		StringWriter writer = new StringWriter()
 		Marshaller marshaller = JAXBContext.newInstance(Svg).createMarshaller()
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE)
-		marshaller.marshal(retval, writer)
+		marshaller.marshal(svg, writer)
 		writer.toString()
 	}
 }
