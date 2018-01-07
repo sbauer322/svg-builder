@@ -1,6 +1,7 @@
 package com.github.rahulsom.svg
 
 import groovy.transform.CompileStatic
+import groovy.transform.Memoized
 
 import javax.xml.bind.JAXBElement
 
@@ -15,16 +16,22 @@ class Context {
         } else {
 
             def factory = new ObjectFactory()
-            def method = factory.metaClass.methods.find {
-                it.returnType == JAXBElement &&
-                        it.parameterTypes.length == 1 &&
-                        it.parameterTypes[0].isAssignableFrom(object.class) &&
-                        it.parameterTypes[0].name != 'java.lang.Object'
-            }
+            def metaClass = factory.metaClass
+            def objectClass = object.class
+            MetaMethod method = getMethod(metaClass, objectClass)
 
-            println method
             things.add(method.invoke(factory, [object] as Object[]) as JAXBElement)
         }
 
+    }
+
+    @Memoized
+    private static MetaMethod getMethod(MetaClass metaClass, Class objectClass) {
+        metaClass.methods.find {
+            it.returnType == JAXBElement &&
+                    it.parameterTypes.length == 1 &&
+                    it.parameterTypes[0].isAssignableFrom(objectClass) &&
+                    it.parameterTypes[0].name != 'java.lang.Object'
+        }
     }
 }
