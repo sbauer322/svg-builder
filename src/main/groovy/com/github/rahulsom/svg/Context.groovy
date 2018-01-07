@@ -13,8 +13,11 @@ class Context {
         def method = factory.metaClass.methods.find {
             it.returnType == JAXBElement &&
                     it.parameterTypes.length == 1 &&
-                    it.parameterTypes[0].isAssignableFrom(object.class)
+                    it.parameterTypes[0].isAssignableFrom(object.class) &&
+                    it.parameterTypes[0].name != 'java.lang.Object'
         }
+
+        println method
 
         things.add(method.invoke(factory, [object] as Object[]) as JAXBElement)
     }
