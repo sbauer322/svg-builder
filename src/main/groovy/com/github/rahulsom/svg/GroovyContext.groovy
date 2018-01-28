@@ -6,7 +6,7 @@ import groovy.transform.Memoized
 import javax.xml.bind.JAXBElement
 
 @CompileStatic
-class Context {
+class GroovyContext {
     List<JAXBElement> things = new ArrayList<>();
 
     boolean leftShift(Object object) {
