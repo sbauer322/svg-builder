@@ -12,9 +12,7 @@ In Java code, the fluent API can be used to build SVG
 [source,java]
 ----
 ObjectFactory objectFactory = new ObjectFactory();
-Svg svg = objectFactory.createSvg().
-        withHeight("3").
-        withWidth("7").
+Svg svg = objectFactory.createSvg().withHeight("3").withWidth("7").
         withSVGDescriptionClassOrSVGAnimationClassOrSVGStructureClass(
                 objectFactory.createCircle(
                         objectFactory.createCircle()
@@ -37,6 +35,17 @@ void foo() {
             it << SVGHyperlinkClass()
         }
 }
+----
+
+Similarly, in Kotlin you could do this
+
+[source,kotlin]
+----
+val svg = Svg().withHeight("3").withWidth("7")
+    .content {
+        add(Circle())
+        add(SVGHyperlinkClass())
+    }
 ----
 
 The resulting object is like any JAXB Root Element and can be marshaled from that point on.

@@ -4,8 +4,8 @@ echo "nexusPassword=$SONATYPE_PASSWORD" >> ~/.gradle/gradle.properties
 
 if [ $TRAVIS_PULL_REQUEST = false ]; then
   if [ $(echo $TRAVIS_BRANCH | grep -cE '(master)|(\d+\..+)') = 1 ]; then
-    ./gradlew  snapshot
+    ./gradlew snapshot
   else
-    ./gradlew  check
+    ./gradlew check
   fi
 fi

@@ -7,7 +7,7 @@ plugins {
 
     id 'java'
     id 'groovy'
-    id "org.jetbrains.kotlin.jvm" version "1.2.10"
+    id "org.jetbrains.kotlin.jvm" version "1.2.21"
 
     id "nebula.info" version "3.6.0"
     id "nebula.release" version "6.1.1"
@@ -27,6 +27,7 @@ repositories {
 sourceSets {
     main {
         groovy.srcDir "build/groovysupport/generated-sources"
+        kotlin.srcDir "build/xjc/generated-sources"
     }
 }
 
@@ -37,7 +38,8 @@ dependencies {
     compileOnly 'org.codehaus.groovy:groovy-all:2.4.12'
 
     testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
-    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.10"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.21"
+    compileOnly "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.21"
 }
 
 
@@ -56,10 +58,7 @@ compileTestKotlin {
 xjcGenerate {
     source = fileTree('build/schemas') { include '*.xsd' }
     bindingFiles = fileTree('src/main/jaxb') { include '*.xjb' }
-
-    extraArgs = [
-            '-Xfluent-api', '-Xannotate'
-    ]
+    extraArgs = ['-Xfluent-api', '-Xannotate']
 }
 
 task download() {
@@ -77,6 +76,13 @@ xjcGenerate.doLast {
     new GroovyNewifyBuilder().createFile()
 }
 compileJava.dependsOn 'xjcGenerate'
+compileKotlin.dependsOn 'xjcGenerate'
+compileTestGroovy.doFirst {
+    copy {
+        from "build/classes/kotlin/test"
+        into "build/classes/java/test"
+    }
+}
 
 buildScan {
     licenseAgreementUrl = 'https://gradle.com/terms-of-service'
