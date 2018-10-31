@@ -33,7 +33,7 @@ sourceSets {
 
 dependencies {
     xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-fluent-api:3.0'
-    xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-basics-annotate:1.0.4'
+    xjcClasspath 'org.jvnet.jaxb2_commons:jaxb2-basics-annotate:1.1.0'
 
     compileOnly 'org.codehaus.groovy:groovy-all:2.4.12'
 
