@@ -92,3 +92,7 @@ buildScan {
 buildScanRecipes {
     recipes 'git-commit', 'git-status', 'travis-ci', 'gc-stats'
 }
+
+javadoc {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
